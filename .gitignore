@@ -1,3 +1,5 @@
 /juez.sh
 /data
 /data_eficiencia
+/cmake-build-debug
+CMakeLists.txt

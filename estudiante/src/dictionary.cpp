@@ -154,28 +154,57 @@ int Dictionary::getTotalUsages(const char c){
 //                                 Iterator                                  //
 ///////////////////////////////////////////////////////////////////////////////
 
-/*Dictionary::iterator::iterator() {
-
+Dictionary::iterator::iterator() {
+    curr_word = "";
+    iter = tree<char_info>::const_preorder_iterator();
 }
 
 Dictionary::iterator::iterator(tree<char_info>::const_preorder_iterator iter) {
-
+    curr_word = "";
+    for(int i=0; i<iter.get_level(); i++) {
+        curr_word += ' ';
+    }
+    this->iter = iter;
 }
 
 std::string Dictionary::iterator::operator*() {
-
+    return  curr_word;
 }
 
 Dictionary::iterator &Dictionary::iterator::operator++() {
 
+    do {
+        ++iter;
+
+        if (tree<char_info>::const_preorder_iterator() == iter)  { // Si ha llegado al final
+            curr_word = "";
+            return *this;
+        }
+
+        if(iter.get_level() > curr_word.length()) { // Si se desciende un nivel
+            // Se añade una letra a la palabra
+            curr_word += (*iter).character;
+        }
+        else if(iter.get_level() < curr_word.length()) { // Si se asciende un nivel
+            // Se elimina una letra de la palabra
+            curr_word.pop_back();
+            curr_word[curr_word.length() - 1] = (*iter).character;
+        }
+        else { // Si se queda en el mismo nivel
+            // Cambiamos la ultima letra por la nueva
+            curr_word[curr_word.length() - 1] = (*iter).character;
+        }
+    } while (!(*iter).valid_word);
+
+    return *this;
 }
 
 bool Dictionary::iterator::operator==(const iterator &other) {
-
+    return iter == other.iter;
 }
 
 bool Dictionary::iterator::operator!=(const iterator &other) {
-
+    return iter != other.iter;
 }
 
 Dictionary::iterator Dictionary::begin() const {
@@ -184,7 +213,7 @@ Dictionary::iterator Dictionary::begin() const {
 
 Dictionary::iterator Dictionary::end() const {
 
-}*/
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //                            Letters Iterator                               //
