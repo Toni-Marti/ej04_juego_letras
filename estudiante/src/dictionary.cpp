@@ -176,7 +176,7 @@ Dictionary::iterator &Dictionary::iterator::operator++() {
     do {
         ++iter;
 
-        if (tree<char_info>::const_preorder_iterator() == iter)  { // Si ha llegado al final
+        if (iter == tree<char_info>::const_preorder_iterator())  { // Si ha llegado al final
             curr_word = "";
             return *this;
         }
@@ -187,13 +187,17 @@ Dictionary::iterator &Dictionary::iterator::operator++() {
         }
         else if(iter.get_level() < curr_word.length()) { // Si se asciende un nivel
             // Se elimina una letra de la palabra
-            curr_word.pop_back();
-            curr_word[curr_word.length() - 1] = (*iter).character;
+            int longitud_inicial = curr_word.length();
+            for(int i = 0; i < longitud_inicial - iter.get_level(); i++) {
+                curr_word.pop_back();
+            }
+            curr_word[iter.get_level() - 1] = (*iter).character;
         }
         else { // Si se queda en el mismo nivel
             // Cambiamos la ultima letra por la nueva
             curr_word[curr_word.length() - 1] = (*iter).character;
         }
+
     } while (!(*iter).valid_word);
 
     return *this;
@@ -208,11 +212,12 @@ bool Dictionary::iterator::operator!=(const iterator &other) {
 }
 
 Dictionary::iterator Dictionary::begin() const {
-
+    Dictionary::iterator it(words.get_root());
+    return ++it;
 }
 
 Dictionary::iterator Dictionary::end() const {
-
+    return Dictionary::iterator();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
